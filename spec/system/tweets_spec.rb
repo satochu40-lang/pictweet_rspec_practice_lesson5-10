@@ -9,6 +9,7 @@ RSpec.describe 'ツイート投稿', type: :system do
   context 'ツイート投稿ができるとき'do
     it 'ログインしたユーザーは新規投稿できる' do
       # ログインする
+       sign_in(@user)
       visit new_user_session_path
       fill_in 'Email', with: @user.email
       fill_in 'Password', with: @user.password
@@ -49,6 +50,7 @@ RSpec.describe 'ツイート編集', type: :system do
   end
   context 'ツイート編集ができるとき' do
     it 'ログインしたユーザーは自分が投稿したツイートの編集ができる' do
+      sign_in(@tweet1.user)
       # ツイート1を投稿したユーザーでログインする
       visit new_user_session_path
       fill_in 'Email', with: @tweet1.user.email
@@ -81,6 +83,7 @@ RSpec.describe 'ツイート編集', type: :system do
   context 'ツイート編集ができないとき' do
     it 'ログインしたユーザーは自分以外が投稿したツイートの編集画面には遷移できない' do
       # ツイート1を投稿したユーザーでログインする
+      sign_in(@tweet1.user)
       visit new_user_session_path
       fill_in 'Email', with: @tweet1.user.email
       fill_in 'Password', with: @tweet1.user.password
@@ -114,6 +117,7 @@ RSpec.describe 'ツイート削除', type: :system do
   context 'ツイート削除ができるとき' do
     it 'ログインしたユーザーは自らが投稿したツイートの削除ができる' do
       # ツイート1を投稿したユーザーでログインする
+     sign_in(@tweet1.user)     
       visit new_user_session_path
       fill_in 'Email', with: @tweet1.user.email
       fill_in 'Password', with: @tweet1.user.password
@@ -137,6 +141,7 @@ RSpec.describe 'ツイート削除', type: :system do
   context 'ツイート削除ができないとき' do
     it 'ログインしたユーザーは自分以外が投稿したツイートの削除ができない' do
       # ツイート1を投稿したユーザーでログインする
+     sign_in(@tweet1.user)      
       visit new_user_session_path
       fill_in 'Email', with: @tweet1.user.email
       fill_in 'Password', with: @tweet1.user.password
@@ -173,6 +178,7 @@ RSpec.describe 'ツイート詳細', type: :system do
     fill_in 'Password', with: @tweet.user.password
     find('input[name="commit"]').click
     expect(page).to have_current_path(root_path)
+    sign_in(@tweet.user)
     # ツイートに「詳細」へのリンクがある
     expect(
       all(".more")[0].hover
